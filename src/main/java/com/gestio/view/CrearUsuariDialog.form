@@ -103,41 +103,26 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JTextField" name="txtNom">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="inserta nom"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNomActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtLlinatge1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="inserta llinatge"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtLlinatge1ActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtLlinatge2">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="inserta llinatge2"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtLlinatge2ActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtDNI">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="inserta dni"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtDNIActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtTelfon">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="inserta tel"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTelfonActionPerformed"/>
       </Events>

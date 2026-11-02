@@ -5,12 +5,15 @@
 package com.gestio.view;
 
 import com.gestio.controller.GestorDades;
+import com.gestio.model.Joc;
 import com.gestio.model.Lloguer;
+import com.gestio.model.Usuari;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -72,16 +75,25 @@ public final class FinestraPrincipal extends javax.swing.JFrame {
     public void carregarTaulaLloguers() {
         modelTaula.setRowCount(0); 
         List<Lloguer> llista = GestorDades.getInstancia().getLloguers();
+        String estat;
+        
 
         for (Lloguer l : llista) {
+            if (l.isRetornat()) {
+                estat = "Retornat";
+            } else if (l.getDataTornada().isBefore(LocalDate.now())) {
+                estat = "Fora de Termini";
+            } else {
+                estat = "En Termini";
+            }
+
             modelTaula.addRow(new Object[]{
-                l.getId(),
-                l.getJoc().getNom(),
                 l.getUsuari().getNomComplet(),
+                l.getJoc().getNom(),
                 l.getPlataforma(),
                 l.getDataInici().format(FORMATTER),
                 l.getDataTornada().format(FORMATTER),
-                l.getJoc().getGenere()
+                estat
             });
         }
         jLabelTotalLloguers.setText("Total de lloguers: " + llista.size());
@@ -214,8 +226,39 @@ public final class FinestraPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuJocCrearActionPerformed
 
     private void jMenuJocBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuJocBorrarActionPerformed
-        // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Funció de borrar joc pendent d'implementar.");
+        List<Joc> jocs = GestorDades.getInstancia().getJocs();
+        if (jocs.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                "No hi ha cap joc registrat per eliminar.",
+                "Atenció",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Joc jocSeleccionat = (Joc) JOptionPane.showInputDialog(
+            this,
+            "Selecciona el joc que vols eliminar:",
+            "Eliminar Joc",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            jocs.toArray(),
+            jocs.get(0)
+        );
+
+        if (jocSeleccionat != null) {
+            boolean esborrat = GestorDades.getInstancia().esborrarJoc(jocSeleccionat);
+            if (esborrat) {
+                JOptionPane.showMessageDialog(this,
+                    "El joc '" + jocSeleccionat.getNom() + "' s'ha eliminat amb èxit.",
+                    "Operació completada",
+                    JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "No es pot eliminar el joc '" + jocSeleccionat.getNom() + "' perquè té lloguers actius relacionats.",
+                    "Error d'integritat referencial",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_jMenuJocBorrarActionPerformed
 
     private void jMenuUsrCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuUsrCrearActionPerformed
@@ -226,8 +269,31 @@ public final class FinestraPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuUsrCrearActionPerformed
 
     private void jMenuUsrBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuUsrBorrarActionPerformed
-        // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "Funció de borrar usuari pendent d'implementar.");
+        List<Usuari> usuaris = GestorDades.getInstancia().getUsuaris();
+    
+        if (usuaris.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hi ha cap usuari registrat.", "Atenció", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Usuari usuariSeleccionat = (Usuari) JOptionPane.showInputDialog(
+            this,
+            "Selecciona l'usuari que vols eliminar:",
+            "Eliminar Usuari",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            usuaris.toArray(),
+            usuaris.get(0)
+        );
+
+        if (usuariSeleccionat != null) {
+            boolean eliminat = GestorDades.getInstancia().esborrarUsuari(usuariSeleccionat);
+            if (eliminat) {
+                JOptionPane.showMessageDialog(this, "Usuari eliminat correctament.", "Èxit", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No es pot eliminar l'usuari perquè té lloguers actius pendents.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_jMenuUsrBorrarActionPerformed
 
     /**

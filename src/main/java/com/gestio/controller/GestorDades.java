@@ -30,20 +30,24 @@ public class GestorDades {
     }
 
     private void carregarDadesInicials() {
-        Usuari u1 = new Usuari("Laura", "García", "", "12345678A", "600111222");
-        Usuari u2 = new Usuari("Marc", "López", "", "87654321B", "600333444");
+        Usuari u1 = new Usuari("Laura", "García", "Martínez", "12345678A", "600111222");
+        Usuari u2 = new Usuari("Marc", "Rosselló", "López", "87654321B", "600333444");
         usuaris.add(u1);
         usuaris.add(u2);
 
-        Joc j1 = new Joc("Cyberpunk 2077", "Acció");
-        j1.setUnitatsPlataforma("PC", 1);
-        j1.setUnitatsPlataforma("PS5", 0);
+        Joc j1 = new Joc("The Legend of Zelda", "Aventura");
+        j1.setUnitatsPlataforma("PS5", 2);
+        j1.setUnitatsPlataforma("Switch 2", 2);
 
-        Joc j2 = new Joc("Minecraft", "Aventura");
-        j2.setUnitatsPlataforma("Switch 2", 2);
+        Joc j2 = new Joc("Cyberpunk 2077", "Acció");
+        j2.setUnitatsPlataforma("Xbox", 1);
+        j2.setUnitatsPlataforma("PC", 2);
 
         jocs.add(j1);
         jocs.add(j2);
+
+        registrarLloguer(j1, u1, "Switch 2", LocalDate.now().minusDays(5), LocalDate.now().plusDays(2));
+        registrarLloguer(j2, u2, "PC", LocalDate.now().minusDays(10), LocalDate.now().minusDays(3)); // Fora de termini per provar el vermell
     }
 
     public void afegirUsuari(Usuari u) { usuaris.add(u); }
@@ -67,6 +71,38 @@ public class GestorDades {
             lloguer.setRetornat(true);
             lloguer.getJoc().incrementarUnitat(lloguer.getPlataforma());
         }
+    }
+    
+    public boolean teLloguersActiusUsuari(Usuari u) {
+        for (Lloguer l : lloguers) {
+            if (!l.isRetornat() && l.getUsuari().equals(u)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean esborrarUsuari(Usuari u) {
+        if (teLloguersActiusUsuari(u)) {
+            return false;
+        }
+        return usuaris.remove(u);
+    }
+
+    public boolean teLloguersActiusJoc(Joc j) {
+        for (Lloguer l : lloguers) {
+            if (!l.isRetornat() && l.getJoc().equals(j)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean esborrarJoc(Joc j) {
+        if (teLloguersActiusJoc(j)) {
+            return false;
+        }
+        return jocs.remove(j);
     }
 
     public List<Usuari> getUsuaris() { return usuaris; }

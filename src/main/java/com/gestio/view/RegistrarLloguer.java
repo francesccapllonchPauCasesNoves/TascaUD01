@@ -64,7 +64,7 @@ public class RegistrarLloguer extends javax.swing.JDialog {
         cbUsuari.removeAllItems();
         List<Usuari> usuaris = GestorDades.getInstancia().getUsuaris();
         for (Usuari u : usuaris) {
-            cbUsuari.addItem(u.getNom());
+            cbUsuari.addItem(u);
         }
     }
     
@@ -72,7 +72,7 @@ public class RegistrarLloguer extends javax.swing.JDialog {
         cbJoc.removeAllItems();
         List<Joc> jocs = GestorDades.getInstancia().getJocs();
         for (Joc j : jocs) {
-            cbJoc.addItem(j.getNom());
+            cbJoc.addItem(j);
         }
     }
     
@@ -168,12 +168,9 @@ public class RegistrarLloguer extends javax.swing.JDialog {
 
         jLabel1.setText("Usuari:");
 
-        cbUsuari.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbUsuari.addActionListener(this::cbUsuariActionPerformed);
 
         jLabel2.setText("Joc elegit:");
-
-        cbJoc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel8.setText("Data inici:");
 
@@ -433,16 +430,17 @@ public class RegistrarLloguer extends javax.swing.JDialog {
     }//GEN-LAST:event_btnConfirmarActionPerformed
     
     private void obrirCrearUsuari(java.awt.event.ActionEvent evt) {
-        CrearUsuariDialog dialog = new CrearUsuariDialog((java.awt.Frame) this.getParent(), true);
+        CrearUsuariDialog dialog = new CrearUsuariDialog((java.awt.Frame) this.getOwner(), true);
         dialog.setVisible(true);
         carregarUsuaris();
     }
     
     private void obrirCrearJoc(java.awt.event.ActionEvent evt) {
-        CrearJocDialog dialog = new CrearJocDialog((java.awt.Frame) this.getParent(), true);
+        CrearJocDialog dialog = new CrearJocDialog((java.awt.Frame) this.getOwner(), true);
         dialog.setVisible(true);
         carregarJocs();
         actualitzarInformacioJoc();
+        
     }
     
 
@@ -452,8 +450,8 @@ public class RegistrarLloguer extends javax.swing.JDialog {
     private javax.swing.JButton btnSeleccionarJoc;
     private javax.swing.JButton btnSeleccionarUsr;
     private javax.swing.ButtonGroup buttonGroup;
-    private javax.swing.JComboBox<String> cbJoc;
-    private javax.swing.JComboBox<String> cbUsuari;
+    private javax.swing.JComboBox<com.gestio.model.Joc> cbJoc;
+    private javax.swing.JComboBox<com.gestio.model.Usuari> cbUsuari;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

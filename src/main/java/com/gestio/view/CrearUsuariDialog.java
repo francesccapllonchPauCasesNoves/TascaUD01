@@ -28,21 +28,16 @@ public class CrearUsuariDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        // Configuració inicial de la finestra
         this.setTitle("Crear usuari");
         this.setLocationRelativeTo(parent);
         
-        // Assignar data de registre automàticament i bloquejar edició
         txtDataRegistre.setText(LocalDate.now().format(FORMATTER));
         txtDataRegistre.setEditable(false);
         
-        // Netejar o ajustar etiquetes dels botons
         btnConfirmar.setText("Confirmar");
         btnCancelar.setText("Cancel·lar");
         
-        // Assignar esdeveniments als botons si no estan definits al dissenyador
-        btnConfirmar.addActionListener(this::btnConfirmarActionPerformed);
-        btnCancelar.addActionListener(this::btnCancelarActionPerformed);
+        
     }
 
     /**
@@ -71,19 +66,14 @@ public class CrearUsuariDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        txtNom.setText("inserta nom");
         txtNom.addActionListener(this::txtNomActionPerformed);
 
-        txtLlinatge1.setText("inserta llinatge");
         txtLlinatge1.addActionListener(this::txtLlinatge1ActionPerformed);
 
-        txtLlinatge2.setText("inserta llinatge2");
         txtLlinatge2.addActionListener(this::txtLlinatge2ActionPerformed);
 
-        txtDNI.setText("inserta dni");
         txtDNI.addActionListener(this::txtDNIActionPerformed);
 
-        txtTelfon.setText("inserta tel");
         txtTelfon.addActionListener(this::txtTelfonActionPerformed);
 
         txtDataRegistre.setEditable(false);
@@ -212,6 +202,14 @@ public class CrearUsuariDialog extends javax.swing.JDialog {
                 "El format del telèfon no és vàlid (ha de tenir 9 dígits).",
                 "Error de validació",
                 JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if (!ValidationAPI.comencaAmbMajuscula(nom)) {
+            JOptionPane.showMessageDialog(this,
+                "El nom de l'usuari ha de començar obligatòriament amb una lletra majúscula.",
+                "Error de validació",
+                JOptionPane.WARNING_MESSAGE);
             return;
         }
 

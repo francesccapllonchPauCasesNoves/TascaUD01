@@ -65,7 +65,6 @@ public final class TornarLloguerDialog extends javax.swing.JDialog {
         btnMarcarRetornat.setText("Marcar com a retornat");
         jButtonTancar.setText("Tancar");
 
-        btnMarcarRetornat.addActionListener(this::btnMarcarRetornatActionPerformed);
         jButtonTancar.addActionListener(e -> this.dispose());
     }
     
@@ -247,7 +246,7 @@ public final class TornarLloguerDialog extends javax.swing.JDialog {
                 "Èxit",
                 JOptionPane.INFORMATION_MESSAGE);
 
-            carregarLloguersActius(); // Recarregar la taula i alliberar stock
+            carregarLloguersActius(); 
         } else {
             JOptionPane.showMessageDialog(this,
                 "Heu de seleccionar un lloguer de la taula.",

@@ -17,4 +17,11 @@ public class ValidationAPI {
         String telRegex = "^[0-9]{9}$";
         return telefon.matches(telRegex);
     }
+    
+    public static boolean comencaAmbMajuscula(String text) {
+    if (text == null || text.trim().isEmpty()) {
+        return false;
+    }
+    return Character.isUpperCase(text.trim().charAt(0));
+}
 }
