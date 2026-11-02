@@ -4,6 +4,10 @@
  */
 package com.gestio.view;
 
+import com.gestio.controller.GestorDades;
+import com.gestio.model.Joc;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author fran
@@ -14,6 +18,8 @@ public class CrearJocDialog extends javax.swing.JDialog {
 
     /**
      * Creates new form CrearJocDialog
+     * @param parent
+     * @param modal
      */
     public CrearJocDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -32,23 +38,23 @@ public class CrearJocDialog extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        txtNomJoc = new javax.swing.JTextField();
+        txtNom = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbGenere = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
-        jCheckBoxPS5 = new javax.swing.JCheckBox();
-        jCheckBoxXbox = new javax.swing.JCheckBox();
-        jCheckBoxPC = new javax.swing.JCheckBox();
-        jCheckBoxSwitch2 = new javax.swing.JCheckBox();
-        jLabel3 = new javax.swing.JLabel();
+        chkPS5 = new javax.swing.JCheckBox();
+        chkXbox = new javax.swing.JCheckBox();
+        chkPC = new javax.swing.JCheckBox();
+        chkSwitch2 = new javax.swing.JCheckBox();
+        plataformes = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jSpinnerPS5 = new javax.swing.JSpinner();
-        jSpinnerXbox = new javax.swing.JSpinner();
-        jSpinnerPC = new javax.swing.JSpinner();
-        jSpinnerSwitch2 = new javax.swing.JSpinner();
+        spnPS5 = new javax.swing.JSpinner();
+        spnXbox = new javax.swing.JSpinner();
+        spnPC = new javax.swing.JSpinner();
+        spnSwitch2 = new javax.swing.JSpinner();
         btnConfirmar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
@@ -69,24 +75,28 @@ public class CrearJocDialog extends javax.swing.JDialog {
 
         jLabel1.setText("Nom: ");
 
-        txtNomJoc.setText("Nom");
+        txtNom.setText("Nom");
 
         jLabel2.setText("Genere:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
+        cbGenere.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbGenere.addActionListener(this::cbGenereActionPerformed);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jCheckBoxPS5.setText("PS5");
+        chkPS5.setText("PS5");
+        chkPS5.addActionListener(this::chkPS5ActionPerformed);
 
-        jCheckBoxXbox.setText("Xbox");
+        chkXbox.setText("Xbox");
+        chkXbox.addActionListener(this::chkXboxActionPerformed);
 
-        jCheckBoxPC.setText("PC");
+        chkPC.setText("PC");
+        chkPC.addActionListener(this::chkPCActionPerformed);
 
-        jCheckBoxSwitch2.setText("Switch2");
+        chkSwitch2.setText("Switch2");
+        chkSwitch2.addActionListener(this::chkSwitch2ActionPerformed);
 
-        jLabel3.setText("Plataformes");
+        plataformes.setText("Plataformes");
 
         jLabel4.setText("Unitats:");
 
@@ -103,61 +113,67 @@ public class CrearJocDialog extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBoxPC)
-                    .addComponent(jLabel3)
+                    .addComponent(chkPC)
+                    .addComponent(plataformes)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBoxXbox)
-                            .addComponent(jCheckBoxPS5)
-                            .addComponent(jCheckBoxSwitch2))
+                            .addComponent(chkXbox)
+                            .addComponent(chkPS5)
+                            .addComponent(chkSwitch2))
                         .addGap(61, 61, 61)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jSpinnerSwitch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(spnSwitch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jSpinnerPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(spnPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jSpinnerXbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(spnXbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addGap(33, 33, 33)
-                                .addComponent(jSpinnerPS5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(spnPS5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {spnPC, spnPS5, spnSwitch2, spnXbox});
+
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel3)
+                .addComponent(plataformes)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBoxPS5)
+                    .addComponent(chkPS5)
                     .addComponent(jLabel5)
-                    .addComponent(jSpinnerPS5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spnPS5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBoxXbox)
+                    .addComponent(chkXbox)
                     .addComponent(jLabel6)
-                    .addComponent(jSpinnerXbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spnXbox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBoxPC)
+                    .addComponent(chkPC)
                     .addComponent(jLabel4)
-                    .addComponent(jSpinnerPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spnPC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBoxSwitch2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
-                    .addComponent(jSpinnerSwitch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                    .addComponent(spnSwitch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkSwitch2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {spnPC, spnPS5, spnSwitch2, spnXbox});
+
         btnConfirmar.setText("Confirmar");
+        btnConfirmar.addActionListener(this::btnConfirmarActionPerformed);
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(this::btnCancelarActionPerformed);
@@ -173,17 +189,17 @@ public class CrearJocDialog extends javax.swing.JDialog {
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel1)
-                                .addComponent(txtNomJoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(87, 87, 87)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cbGenere, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel2)))
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnConfirmar)
                         .addGap(18, 18, 18)
                         .addComponent(btnCancelar)
-                        .addGap(16, 16, 16))))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,27 +210,100 @@ public class CrearJocDialog extends javax.swing.JDialog {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtNomJoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbGenere, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConfirmar)
                     .addComponent(btnCancelar))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        this.dispose();// TODO add your handling code here:
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cbGenereActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbGenereActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_cbGenereActionPerformed
+
+    private void chkPS5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPS5ActionPerformed
+        spnPS5.setEnabled(chkPS5.isSelected());
+        if (!chkPS5.isSelected()) {
+            spnPS5.setValue(0); // Reinicia a 0 si es desmarca
+        }       // TODO add your handling code here:
+    }//GEN-LAST:event_chkPS5ActionPerformed
+
+    private void chkXboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkXboxActionPerformed
+        spnXbox.setEnabled(chkXbox.isSelected());
+        if (!chkXbox.isSelected()) {
+            spnXbox.setValue(0);
+        }// TODO add your handling code here:
+    }//GEN-LAST:event_chkXboxActionPerformed
+
+    private void chkPCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPCActionPerformed
+        // TODO add your handling code here:
+        spnPC.setEnabled(chkPC.isSelected());
+        if (!chkPC.isSelected()) {
+            spnPC.setValue(0);
+        }
+    }//GEN-LAST:event_chkPCActionPerformed
+
+    private void chkSwitch2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkSwitch2ActionPerformed
+        // TODO add your handling code here:
+        spnSwitch2.setEnabled(chkSwitch2.isSelected());
+        if (!chkSwitch2.isSelected()) {
+            spnSwitch2.setValue(0);
+        }
+    }//GEN-LAST:event_chkSwitch2ActionPerformed
+
+    private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
+        String nom = txtNom.getText().trim();
+        String genere = (String) cbGenere.getSelectedItem();
+
+        if (nom.isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "El nom del joc és obligatori.", 
+                "Error de validació", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        boolean algunaPlataforma = chkPS5.isSelected() || chkXbox.isSelected() || 
+                                   chkPC.isSelected() || chkSwitch2.isSelected();
+
+        if (!algunaPlataforma) {
+            JOptionPane.showMessageDialog(this, 
+                "Heu de seleccionar almenys una plataforma.", 
+                "Error de validació", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Joc nouJoc = new Joc(nom, genere);
+
+        if (chkPS5.isSelected()) {
+            nouJoc.setUnitatsPlataforma("PS5", (Integer) spnPS5.getValue());
+        }
+        if (chkXbox.isSelected()) {
+            nouJoc.setUnitatsPlataforma("Xbox", (Integer) spnXbox.getValue());
+        }
+        if (chkPC.isSelected()) {
+            nouJoc.setUnitatsPlataforma("PC", (Integer) spnPC.getValue());
+        }
+        if (chkSwitch2.isSelected()) {
+            nouJoc.setUnitatsPlataforma("Switch 2", (Integer) spnSwitch2.getValue());
+        }
+
+        GestorDades.getInstancia().afegirJoc(nouJoc);
+
+        this.dispose();// TODO add your handling code here:
+    }//GEN-LAST:event_btnConfirmarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -256,25 +345,25 @@ public class CrearJocDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnConfirmar;
-    private javax.swing.JCheckBox jCheckBoxPC;
-    private javax.swing.JCheckBox jCheckBoxPS5;
-    private javax.swing.JCheckBox jCheckBoxSwitch2;
-    private javax.swing.JCheckBox jCheckBoxXbox;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> cbGenere;
+    private javax.swing.JCheckBox chkPC;
+    private javax.swing.JCheckBox chkPS5;
+    private javax.swing.JCheckBox chkSwitch2;
+    private javax.swing.JCheckBox chkXbox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jSpinnerPC;
-    private javax.swing.JSpinner jSpinnerPS5;
-    private javax.swing.JSpinner jSpinnerSwitch2;
-    private javax.swing.JSpinner jSpinnerXbox;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtNomJoc;
+    private javax.swing.JLabel plataformes;
+    private javax.swing.JSpinner spnPC;
+    private javax.swing.JSpinner spnPS5;
+    private javax.swing.JSpinner spnSwitch2;
+    private javax.swing.JSpinner spnXbox;
+    private javax.swing.JTextField txtNom;
     // End of variables declaration//GEN-END:variables
 }
