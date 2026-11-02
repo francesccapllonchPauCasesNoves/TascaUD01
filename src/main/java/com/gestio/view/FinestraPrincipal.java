@@ -4,20 +4,88 @@
  */
 package com.gestio.view;
 
+import com.gestio.controller.GestorDades;
+import com.gestio.model.Lloguer;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 /**
  *
  * @author fran
  */
-public class FinestraPrincipal extends javax.swing.JFrame {
+public final class FinestraPrincipal extends javax.swing.JFrame {
     
-    private static final FinestraPrincipal.util.logging.Logger logger = FinestraPrincipal.util.logging.Logger.getLogger(FinestraPrincipal.class.getName());
+    private DefaultTableModel modelTaula;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     /**
      * Creates new form java
      */
     public FinestraPrincipal() {
         initComponents();
+        this.setTitle("Gestió de Lloguer de Videojocs");
+        this.setLocationRelativeTo(null);
+        
+        configurarTaula();
+        carregarTaulaLloguers();
     }
+    
+    private void configurarTaula() {
+        modelTaula = new DefaultTableModel(
+            new String[]{
+                "Núm. registre", "Títol del joc", "Usuari que l'ha llogat", 
+                "Plataforma", "Data d'inici", "Data de tornada", "Gènere"
+            }, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
+        tblLloguers.setModel(modelTaula);
+        tblLloguers.getTableHeader().setReorderingAllowed(false);
+
+        tblLloguers.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value,
+                                                           boolean isSelected, boolean hasFocus,
+                                                           int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (!isSelected) {
+                    if (row % 2 == 0) {
+                        c.setBackground(new Color(212, 245, 222)); 
+                    } else {
+                        c.setBackground(new Color(255, 218, 218)); 
+                    }
+                    c.setForeground(Color.BLACK);
+                }
+                return c;
+            }
+        });
+    }
+    
+    public void carregarTaulaLloguers() {
+        modelTaula.setRowCount(0); 
+        List<Lloguer> llista = GestorDades.getInstancia().getLloguers();
+
+        for (Lloguer l : llista) {
+            modelTaula.addRow(new Object[]{
+                l.getId(),
+                l.getJoc().getNom(),
+                l.getUsuari().getNomComplet(),
+                l.getPlataforma(),
+                l.getDataInici().format(FORMATTER),
+                l.getDataTornada().format(FORMATTER),
+                l.getJoc().getGenere()
+            });
+        }
+        jLabelTotalLloguers.setText("Total de lloguers: " + llista.size());
+    } 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,14 +101,14 @@ public class FinestraPrincipal extends javax.swing.JFrame {
         jLabelTotalLloguers = new javax.swing.JLabel();
         jMenuBar = new javax.swing.JMenuBar();
         jMenuLloguers = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuLloguerRegistrar = new javax.swing.JMenuItem();
+        jMenuLloguerTornar = new javax.swing.JMenuItem();
         jMenuJoc = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuJocCrear = new javax.swing.JMenuItem();
+        jMenuJocBorrar = new javax.swing.JMenuItem();
         jMenuUsuari = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuUsrCrear = new javax.swing.JMenuItem();
+        jMenuUsrBorrar = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,33 +130,37 @@ public class FinestraPrincipal extends javax.swing.JFrame {
 
         jMenuLloguers.setText("Lloguer");
 
-        jMenuItem1.setText("Registrar");
-        jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
-        jMenuLloguers.add(jMenuItem1);
+        jMenuLloguerRegistrar.setText("Registrar");
+        jMenuLloguerRegistrar.addActionListener(this::jMenuLloguerRegistrarActionPerformed);
+        jMenuLloguers.add(jMenuLloguerRegistrar);
 
-        jMenuItem2.setText("Tornar");
-        jMenuItem2.addActionListener(this::jMenuItem2ActionPerformed);
-        jMenuLloguers.add(jMenuItem2);
+        jMenuLloguerTornar.setText("Tornar");
+        jMenuLloguerTornar.addActionListener(this::jMenuLloguerTornarActionPerformed);
+        jMenuLloguers.add(jMenuLloguerTornar);
 
         jMenuBar.add(jMenuLloguers);
 
         jMenuJoc.setText("Joc");
 
-        jMenuItem6.setText("Crear");
-        jMenuJoc.add(jMenuItem6);
+        jMenuJocCrear.setText("Crear");
+        jMenuJocCrear.addActionListener(this::jMenuJocCrearActionPerformed);
+        jMenuJoc.add(jMenuJocCrear);
 
-        jMenuItem5.setText("Borrar");
-        jMenuJoc.add(jMenuItem5);
+        jMenuJocBorrar.setText("Borrar");
+        jMenuJocBorrar.addActionListener(this::jMenuJocBorrarActionPerformed);
+        jMenuJoc.add(jMenuJocBorrar);
 
         jMenuBar.add(jMenuJoc);
 
         jMenuUsuari.setText("Usuari");
 
-        jMenuItem3.setText("Crear");
-        jMenuUsuari.add(jMenuItem3);
+        jMenuUsrCrear.setText("Crear");
+        jMenuUsrCrear.addActionListener(this::jMenuUsrCrearActionPerformed);
+        jMenuUsuari.add(jMenuUsrCrear);
 
-        jMenuItem4.setText("Borrar");
-        jMenuUsuari.add(jMenuItem4);
+        jMenuUsrBorrar.setText("Borrar");
+        jMenuUsrBorrar.addActionListener(this::jMenuUsrBorrarActionPerformed);
+        jMenuUsuari.add(jMenuUsrBorrar);
 
         jMenuBar.add(jMenuUsuari);
 
@@ -116,50 +188,68 @@ public class FinestraPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuLloguerRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuLloguerRegistrarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+        RegistrarLloguer dialog = new RegistrarLloguer(this, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+        carregarTaulaLloguers();
+        
+    }//GEN-LAST:event_jMenuLloguerRegistrarActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void jMenuLloguerTornarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuLloguerTornarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+        TornarLloguerDialog dialog = new TornarLloguerDialog(this, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+        carregarTaulaLloguers();
+    }//GEN-LAST:event_jMenuLloguerTornarActionPerformed
+
+    private void jMenuJocCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuJocCrearActionPerformed
+        // TODO add your handling code here:
+        CrearJocDialog dialog = new CrearJocDialog(this, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+        
+    }//GEN-LAST:event_jMenuJocCrearActionPerformed
+
+    private void jMenuJocBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuJocBorrarActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Funció de borrar joc pendent d'implementar.");
+    }//GEN-LAST:event_jMenuJocBorrarActionPerformed
+
+    private void jMenuUsrCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuUsrCrearActionPerformed
+        // TODO add your handling code here:
+        CrearUsuariDialog dialog = new CrearUsuariDialog(this, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jMenuUsrCrearActionPerformed
+
+    private void jMenuUsrBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuUsrBorrarActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Funció de borrar usuari pendent d'implementar.");
+    }//GEN-LAST:event_jMenuUsrBorrarActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new java().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> {
+            new FinestraPrincipal().setVisible(true);
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabelTotalLloguers;
     private javax.swing.JMenuBar jMenuBar;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenu jMenuJoc;
+    private javax.swing.JMenuItem jMenuJocBorrar;
+    private javax.swing.JMenuItem jMenuJocCrear;
+    private javax.swing.JMenuItem jMenuLloguerRegistrar;
+    private javax.swing.JMenuItem jMenuLloguerTornar;
     private javax.swing.JMenu jMenuLloguers;
+    private javax.swing.JMenuItem jMenuUsrBorrar;
+    private javax.swing.JMenuItem jMenuUsrCrear;
     private javax.swing.JMenu jMenuUsuari;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblLloguers;

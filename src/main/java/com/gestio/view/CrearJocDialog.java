@@ -6,7 +6,9 @@ package com.gestio.view;
 
 import com.gestio.controller.GestorDades;
 import com.gestio.model.Joc;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
@@ -24,6 +26,17 @@ public class CrearJocDialog extends javax.swing.JDialog {
     public CrearJocDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        spnPS5.setModel(new SpinnerNumberModel(0, 0, 100, 1));
+        spnXbox.setModel(new SpinnerNumberModel(0, 0, 100, 1));
+        spnPC.setModel(new SpinnerNumberModel(0, 0, 100, 1));
+        spnSwitch2.setModel(new SpinnerNumberModel(0, 0, 100, 1));
+
+        spnPS5.setEnabled(false);
+        spnXbox.setEnabled(false);
+        spnPC.setEnabled(false);
+        spnSwitch2.setEnabled(false);
+        
+        cbGenere.setModel(new DefaultComboBoxModel<>(new String[]{"Acció", "Aventura", "Esports", "RPG", "Estratègia"}));
     }
 
     /**
