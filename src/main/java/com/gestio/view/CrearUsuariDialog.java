@@ -4,20 +4,45 @@
  */
 package com.gestio.view;
 
+import com.gestio.controller.GestorDades;
+import com.gestio.model.Usuari;
+import com.gestio.utils.ValidationAPI;
+
+import javax.swing.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author fran
  */
 public class CrearUsuariDialog extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CrearUsuariDialog.class.getName());
-
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     /**
      * Creates new form CrearUsuariDialog
+     * @param parent
+     * @param modal
      */
     public CrearUsuariDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        // Configuració inicial de la finestra
+        this.setTitle("Crear usuari");
+        this.setLocationRelativeTo(parent);
+        
+        // Assignar data de registre automàticament i bloquejar edició
+        txtDataRegistre.setText(LocalDate.now().format(FORMATTER));
+        txtDataRegistre.setEditable(false);
+        
+        // Netejar o ajustar etiquetes dels botons
+        btnConfirmar.setText("Confirmar");
+        btnCancelar.setText("Cancel·lar");
+        
+        // Assignar esdeveniments als botons si no estan definits al dissenyador
+        btnConfirmar.addActionListener(this::btnConfirmarActionPerformed);
+        btnCancelar.addActionListener(this::btnCancelarActionPerformed);
     }
 
     /**
@@ -46,19 +71,24 @@ public class CrearUsuariDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        txtNom.setText("jTextField1");
+        txtNom.setText("inserta nom");
         txtNom.addActionListener(this::txtNomActionPerformed);
 
-        txtLlinatge1.setText("jTextField1");
+        txtLlinatge1.setText("inserta llinatge");
+        txtLlinatge1.addActionListener(this::txtLlinatge1ActionPerformed);
 
-        txtLlinatge2.setText("jTextField1");
+        txtLlinatge2.setText("inserta llinatge2");
+        txtLlinatge2.addActionListener(this::txtLlinatge2ActionPerformed);
 
-        txtDNI.setText("jTextField1");
+        txtDNI.setText("inserta dni");
+        txtDNI.addActionListener(this::txtDNIActionPerformed);
 
-        txtTelfon.setText("jTextField1");
+        txtTelfon.setText("inserta tel");
+        txtTelfon.addActionListener(this::txtTelfonActionPerformed);
 
         txtDataRegistre.setEditable(false);
-        txtDataRegistre.setText("jTextField1");
+        txtDataRegistre.setText("02/11/2026");
+        txtDataRegistre.addActionListener(this::txtDataRegistreActionPerformed);
 
         jLabel1.setText("Nom:");
 
@@ -72,9 +102,11 @@ public class CrearUsuariDialog extends javax.swing.JDialog {
 
         jLabel6.setText("Data de Registre: ");
 
-        btnConfirmar.setText("jButton1");
+        btnConfirmar.setText("Confirmar");
+        btnConfirmar.addActionListener(this::btnConfirmarActionPerformed);
 
-        btnCancelar.setText("jButton2");
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(this::btnCancelarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -149,42 +181,93 @@ public class CrearUsuariDialog extends javax.swing.JDialog {
 
     private void txtNomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_txtNomActionPerformed
 
+    private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
+        String nom = txtNom.getText().trim();
+        String llinatge1 = txtLlinatge1.getText().trim();
+        String llinatge2 = txtLlinatge2.getText().trim();
+        String dni = txtDNI.getText().trim();
+        String telefon = txtTelfon.getText().trim();
+
+        if (!ValidationAPI.esTextValid(nom) || !ValidationAPI.esTextValid(llinatge1)) {
+            JOptionPane.showMessageDialog(this,
+                "El nom i el primer llinatge són camps obligatoris.",
+                "Error de validació",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (!ValidationAPI.esDniValid(dni)) {
+            JOptionPane.showMessageDialog(this,
+                "El format del DNI no és vàlid (ex: 87654321B).",
+                "Error de validació",
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (!ValidationAPI.esTelefonValid(telefon)) {
+            JOptionPane.showMessageDialog(this,
+                "El format del telèfon no és vàlid (ha de tenir 9 dígits).",
+                "Error de validació",
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Usuari nouUsuari = new Usuari(nom, llinatge1, llinatge2, dni, telefon);
+        GestorDades.getInstancia().afegirUsuari(nouUsuari);
+
+        JOptionPane.showMessageDialog(this,
+            "Usuari registrat amb èxit.",
+            "Operació completada",
+            JOptionPane.INFORMATION_MESSAGE);
+
+        this.dispose();
+    }//GEN-LAST:event_btnConfirmarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtLlinatge1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLlinatge1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLlinatge1ActionPerformed
+
+    private void txtLlinatge2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLlinatge2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLlinatge2ActionPerformed
+
+    private void txtDNIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDNIActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDNIActionPerformed
+
+    private void txtTelfonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelfonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTelfonActionPerformed
+
+    private void txtDataRegistreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDataRegistreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDataRegistreActionPerformed
+
+    
+    
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+        
+        java.awt.EventQueue.invokeLater(() -> {
+            CrearUsuariDialog dialog = new CrearUsuariDialog(new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
                 }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                CrearUsuariDialog dialog = new CrearUsuariDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
+            });
+            dialog.setVisible(true);
         });
     }
 
