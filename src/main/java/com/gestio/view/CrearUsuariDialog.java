@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package FinestraPrincipal;
+package com.gestio.view;
 
 /**
  *
@@ -47,6 +47,7 @@ public class CrearUsuariDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         txtNom.setText("jTextField1");
+        txtNom.addActionListener(this::txtNomActionPerformed);
 
         txtLlinatge1.setText("jTextField1");
 
@@ -145,6 +146,10 @@ public class CrearUsuariDialog extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtNomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNomActionPerformed
 
     /**
      * @param args the command line arguments

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package FinestraPrincipal;
+package com.gestio.view;
 
 /**
  *
@@ -73,11 +73,11 @@ public class RegistrarLloguer extends javax.swing.JDialog {
         jLabel8.setText("Data inici:");
 
         txtDataInici.setEditable(false);
-        txtDataInici.setText("jTextField1");
+        txtDataInici.setText("15/04/2025");
         txtDataInici.addActionListener(this::txtDataIniciActionPerformed);
 
         txtDataTornada.setEditable(false);
-        txtDataTornada.setText("jTextField1");
+        txtDataTornada.setText("18/05/2025");
 
         jLabel9.setText("Data tornada:");
 
