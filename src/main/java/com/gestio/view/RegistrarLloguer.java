@@ -64,7 +64,7 @@ public class RegistrarLloguer extends javax.swing.JDialog {
         cbUsuari.removeAllItems();
         List<Usuari> usuaris = GestorDades.getInstancia().getUsuaris();
         for (Usuari u : usuaris) {
-            cbUsuari.addItem(u);
+            cbUsuari.addItem(u.getNom());
         }
     }
     
@@ -72,7 +72,7 @@ public class RegistrarLloguer extends javax.swing.JDialog {
         cbJoc.removeAllItems();
         List<Joc> jocs = GestorDades.getInstancia().getJocs();
         for (Joc j : jocs) {
-            cbJoc.addItem(j);
+            cbJoc.addItem(j.getNom());
         }
     }
     

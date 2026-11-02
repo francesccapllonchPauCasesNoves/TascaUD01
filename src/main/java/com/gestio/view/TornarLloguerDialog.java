@@ -4,20 +4,115 @@
  */
 package com.gestio.view;
 
+import com.gestio.controller.GestorDades;
+import com.gestio.model.Lloguer;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author fran
  */
-public class TornarLloguerDialog extends javax.swing.JDialog {
+public final class TornarLloguerDialog extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TornarLloguerDialog.class.getName());
-
+    private DefaultTableModel modelTaula;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private List<Lloguer> lloguersMostrats;
+    private Lloguer lloguerSeleccionat;
+    
     /**
      * Creates new form TornarLloguerDialog
+     * @param parent
+     * @param modal
      */
     public TornarLloguerDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
+        this.setTitle("Tornar lloguer");
+        this.setLocationRelativeTo(parent);
+
+        configurarTaula();
+        configurarEsdeveniments();
+        carregarLloguersActius();
+    }
+    
+    private void configurarTaula() {
+        modelTaula = new DefaultTableModel(
+            new String[]{"Núm. registre", "Títol del joc", "Usuari", "Plataforma", "Data d'inici"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        tbLLoguersActius.setModel(modelTaula);
+        tbLLoguersActius.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+    
+    private void configurarEsdeveniments() {
+        tbLLoguersActius.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                actualitzarDetallSeleccionat();
+            }
+        });
+
+        btnMarcarRetornat.setText("Marcar com a retornat");
+        jButtonTancar.setText("Tancar");
+
+        btnMarcarRetornat.addActionListener(this::btnMarcarRetornatActionPerformed);
+        jButtonTancar.addActionListener(e -> this.dispose());
+    }
+    
+    public void carregarLloguersActius() {
+        modelTaula.setRowCount(0);
+        lloguersMostrats = new ArrayList<>();
+
+        List<Lloguer> tots = GestorDades.getInstancia().getLloguers();
+        for (Lloguer l : tots) {
+            if (!l.isRetornat()) {
+                lloguersMostrats.add(l);
+                modelTaula.addRow(new Object[]{
+                    l.getId(),
+                    l.getJoc().getNom(),
+                    l.getUsuari().getNomComplet(),
+                    l.getPlataforma(),
+                    l.getDataInici().format(FORMATTER)
+                });
+            }
+        }
+
+        netejarPanellDetall();
+    }
+    
+    private void actualitzarDetallSeleccionat() {
+        int fila = tbLLoguersActius.getSelectedRow();
+        if (fila >= 0 && fila < lloguersMostrats.size()) {
+            lloguerSeleccionat = lloguersMostrats.get(fila);
+
+            jLabel1.setText("Joc: " + lloguerSeleccionat.getJoc().getNom());
+            jLabel2.setText("Usuari: " + lloguerSeleccionat.getUsuari().getNomComplet());
+            jLabel3.setText("Plataforma: " + lloguerSeleccionat.getPlataforma());
+            jLabel4.setText("Data d'inici: " + lloguerSeleccionat.getDataInici().format(FORMATTER));
+            
+            btnMarcarRetornat.setEnabled(true);
+        } else {
+            netejarPanellDetall();
+        }
+    }
+    
+    private void netejarPanellDetall() {
+        lloguerSeleccionat = null;
+        jLabel1.setText("Joc: -");
+        jLabel2.setText("Usuari: -");
+        jLabel3.setText("Plataforma: -");
+        jLabel4.setText("Data d'inici: -");
+        btnMarcarRetornat.setEnabled(false);
     }
 
     /**
@@ -36,7 +131,7 @@ public class TornarLloguerDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jButtonMarcarRetornat = new javax.swing.JButton();
+        btnMarcarRetornat = new javax.swing.JButton();
         jButtonTancar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -72,9 +167,11 @@ public class TornarLloguerDialog extends javax.swing.JDialog {
 
         jLabel4.setText("Data d'inici:");
 
-        jButtonMarcarRetornat.setText("jButton1");
+        btnMarcarRetornat.setText("Marcar Retornat");
+        btnMarcarRetornat.addActionListener(this::btnMarcarRetornatActionPerformed);
 
-        jButtonTancar.setText("jButton1");
+        jButtonTancar.setText("Tancar");
+        jButtonTancar.addActionListener(this::jButtonTancarActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -89,8 +186,8 @@ public class TornarLloguerDialog extends javax.swing.JDialog {
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonMarcarRetornat)
-                    .addComponent(jButtonTancar))
+                    .addComponent(btnMarcarRetornat, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButtonTancar, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(29, 29, 29))
         );
         jPanel1Layout.setVerticalGroup(
@@ -104,13 +201,12 @@ public class TornarLloguerDialog extends javax.swing.JDialog {
                         .addComponent(jLabel2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
-                        .addComponent(jButtonMarcarRetornat)))
+                        .addComponent(btnMarcarRetornat)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4))
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
                     .addComponent(jButtonTancar))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
@@ -132,51 +228,37 @@ public class TornarLloguerDialog extends javax.swing.JDialog {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 28, Short.MAX_VALUE))
+                .addGap(0, 22, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void jButtonTancarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTancarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonTancarActionPerformed
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                TornarLloguerDialog dialog = new TornarLloguerDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+    private void btnMarcarRetornatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcarRetornatActionPerformed
+        if (lloguerSeleccionat != null) {
+            GestorDades.getInstancia().marcarComARetornat(lloguerSeleccionat);
+
+            JOptionPane.showMessageDialog(this,
+                "El lloguer s'ha marcat com a retornat correctament.",
+                "Èxit",
+                JOptionPane.INFORMATION_MESSAGE);
+
+            carregarLloguersActius(); // Recarregar la taula i alliberar stock
+        } else {
+            JOptionPane.showMessageDialog(this,
+                "Heu de seleccionar un lloguer de la taula.",
+                "Atenció",
+                JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnMarcarRetornatActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonMarcarRetornat;
+    private javax.swing.JButton btnMarcarRetornat;
     private javax.swing.JButton jButtonTancar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
