@@ -255,7 +255,7 @@ public class CrearUsuariDialog extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void crarUsr(String args[]) {
         
         java.awt.EventQueue.invokeLater(() -> {
             CrearUsuariDialog dialog = new CrearUsuariDialog(new javax.swing.JFrame(), true);
