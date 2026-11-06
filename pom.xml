@@ -8,6 +8,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>27</maven.compiler.release>
-        <exec.mainClass>com.gestio.view.TascaUD01Francesc</exec.mainClass>
+        <exec.mainClass>com.gestio.view.FinestraPrincipal</exec.mainClass>
     </properties>
 </project>
